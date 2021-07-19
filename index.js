@@ -11,8 +11,12 @@ const puppeteer = require('puppeteer');
   // - Acessa a página de login
   await page.click('[href="/login"]');
 
-  await page.type('[name="user[email]"]', process.env.UNPLASH_EMAIL);
-  await page.type('#user_password', process.env.UNPLASH_PASSWORD);
+  // esperando o componente renderizar em tela (também vale usar waitUntil como segundo parâmetro no goto)
+  await page.waitForSelector('[name="user[email]"]');
+
+  // adicionando delay para o site não suspeitar que seja um bot pela velocidade de digitação
+  await page.type('[name="user[email]"]', process.env.UNPLASH_EMAIL, {delay: 300});
+  await page.type('#user_password', process.env.UNPLASH_PASSWORD, {delay: 300});
 
   await page.click('[type="submit"]');
 
